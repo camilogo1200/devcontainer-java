@@ -11,6 +11,9 @@ echo "   Java  : $(java -version 2>&1 | head -n1)"
 echo "   Node  : $(node -v)"
 echo "   Maven : $(mvn -v | head -n1)"
 echo "   Yarn  : $(yarn -v)"
+echo "   Git   : $(git -v)"
+echo "   Git LFS : $(git lfs -v)"
+echo "   Catalina Version : $(catalina version)"
 
 # Example runtime initialization (safe for idempotent runs)
 if [ ! -d "$HOME/.cache/yarn" ]; then
