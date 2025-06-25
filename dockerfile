@@ -15,19 +15,19 @@ ENV DEBIAN_FRONTEND=noninteractive
 #  🔧 INSTALL CORE UTILITIES & SYSTEM DEPENDENCIES                            #
 ###############################################################################
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash curl wget zip unzip gzip tar rsync sudo gnupg lsb-release \
-    ca-certificates software-properties-common openssh-client sshpass \
-    python3 python3-pip git git-lfs build-essential coreutils \
- && rm -rf /var/lib/apt/lists/* \
- && git lfs install --system
+  bash curl wget zip unzip gzip tar rsync sudo gnupg lsb-release \
+  ca-certificates software-properties-common openssh-client sshpass \
+  python3 python3-pip git git-lfs build-essential coreutils \
+  && rm -rf /var/lib/apt/lists/* \
+  && git lfs install --system
 
 ###############################################################################
 #  🟩 INSTALL NODE.JS 20 & NPM FROM OFFICIAL NODESOURCE REPO                  #
 ###############################################################################
 # This ensures the latest stable release using official binaries
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - \
- && sudo apt-get update && sudo apt-get upgrade -y \
- && sudo apt-get install -y nodejs
+  && sudo apt-get update && sudo apt-get upgrade -y \
+  && sudo apt-get install -y nodejs
 
 ###############################################################################
 #  🧰 INSTALL MAVEN 3.9.10                                                     #
@@ -37,8 +37,8 @@ ENV MAVEN_HOME=/opt/apache-maven-${MAVEN_VERSION}
 ENV PATH="${MAVEN_HOME}/bin:${PATH}"
 
 RUN curl -fsSL "https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" \
- | tar -xzC /opt \
- && ln -s "${MAVEN_HOME}/bin/mvn" /usr/local/bin/mvn
+  | tar -xzC /opt \
+  && ln -s "${MAVEN_HOME}/bin/mvn" /usr/local/bin/mvn
 #ENV MAVEN_OPTS="-Dmaven.repo.local=/workspaces/.m2"
 
 ###############################################################################
