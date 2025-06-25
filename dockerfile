@@ -39,7 +39,7 @@ ENV PATH="${MAVEN_HOME}/bin:${PATH}"
 RUN curl -fsSL "https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz" \
  | tar -xzC /opt \
  && ln -s "${MAVEN_HOME}/bin/mvn" /usr/local/bin/mvn
-ENV MAVEN_OPTS="-Dmaven.repo.local=/workspace/.m2"
+#ENV MAVEN_OPTS="-Dmaven.repo.local=/workspaces/.m2"
 
 ###############################################################################
 #  👤 CREATE NON-ROOT DEV USER                                                #
@@ -60,15 +60,14 @@ RUN if ! getent group ${USER_GID} >/dev/null; then \
       echo "⚠️ User UID ${USER_UID} already exists. Skipping useradd."; \
     fi
 USER $USERNAME
-WORKDIR /workspace
-#RUN id ${USERNAME}
+WORKDIR /workspaces
 
 # ─────────────────────────────────────────────────────────────────────────────
-#  📁 Copy Maven settings.xml into /workspace/.m2
+#  📁 Copy Maven settings.xml into /workspaces/.m2
 # ─────────────────────────────────────────────────────────────────────────────
 USER root
-COPY .m2/settings.xml /workspace/.m2/settings.xml
-RUN chown -R ${USERNAME}:${USERNAME} /workspace/.m2
+COPY .m2/settings.xml /home/${USERNAME}/.m2/settings.xml
+RUN chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.m2
 
 ###############################################################################
 #  📦 INSTALL SDKMAN!, Amazon Corretto 17, and Tomcat 11 via SDKMAN!         #
@@ -122,12 +121,13 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ARG USERNAME
-USER ${USERNAME}
+USER root
+RUN chown -R ${USERNAME}:${USERNAME} /workspaces
 
 ###############################################################################
 #  📂 WORKDIR, VOLUME, HEALTHCHECK                                           #
 ###############################################################################
-VOLUME ["/workspace/.m2"]
+VOLUME ["/workspaces/.m2"]
 
 HEALTHCHECK --interval=30s --timeout=10s \
   CMD java -version && node -v && mvn -v || exit 1
