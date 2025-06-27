@@ -7,6 +7,9 @@
 set -euo pipefail
 
 echo "🌟 Container booting…"
+
+echo "   User  : $(whoami)"q
+echo "   Home  : $($HOME)"
 echo "   Java  : $(java -version 2>&1 | head -n1)"
 echo "   Node  : $(node -v)"
 echo "   Maven : $(mvn -v | head -n1)"
